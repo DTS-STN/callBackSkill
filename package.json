@@ -7,9 +7,9 @@
     "main": "lib/index.js",
     "scripts": {
         "clean": "rimraf ./lib",
-        "copy-templates": "copyfiles --up 1 \"./src/**/*.{json,lg}\" \"./lib\"",
+        "copy-templates": "copyfiles --up 1 \"./src/**/*.{json,lg}\" \"./lib/src\"",
         "prebuild": "npm run lint",
-        "build": "tsc --p tsconfig.json && npm run copy-templates",
+        "build": "tsc --build && npm run copy-templates",
         "lint": "eslint ./src/**/*.ts",
         "lint-fix": "eslint --fix ./src/**/*.ts",
         "start": "npm run build && nodemon --exec ts-node src/app.ts",
