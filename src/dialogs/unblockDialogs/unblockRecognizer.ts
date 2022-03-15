@@ -1,9 +1,9 @@
-import { RecognizerResult, TurnContext } from "botbuilder";
+import { RecognizerResult, TurnContext } from 'botbuilder';
 import {
   LuisApplication,
   LuisRecognizer,
-  LuisRecognizerOptionsV3,
-} from "botbuilder-ai";
+  LuisRecognizerOptionsV3
+} from 'botbuilder-ai';
 
 export class UnblockRecognizer {
   private recognizer: LuisRecognizer;
@@ -12,7 +12,7 @@ export class UnblockRecognizer {
   private endpoint;
   constructor(lang: string) {
     // Then change LUIZ appID
-    if (lang === "fr") {
+    if (lang === 'fr') {
       this.applicationId = process.env.LuisAppIdFR;
       this.endpointKey = process.env.LuisAPIKeyFR;
       this.endpoint = `https://${process.env.LuisAPIHostNameFR}.cognitiveservices.azure.com/`;
@@ -24,7 +24,7 @@ export class UnblockRecognizer {
     const luisConfig: LuisApplication = {
       applicationId: this.applicationId,
       endpointKey: this.endpointKey,
-      endpoint: this.endpoint,
+      endpoint: this.endpoint
     };
     const luisIsConfigured =
       luisConfig &&
@@ -35,9 +35,9 @@ export class UnblockRecognizer {
       // Set the recognizer options depending on which endpoint version you want to use e.g LuisRecognizerOptionsV2 or LuisRecognizerOptionsV3.
       // More details can be found in https://docs.microsoft.com/en-gb/azure/cognitive-services/luis/luis-migration-api-v3
       const recognizerOptions: LuisRecognizerOptionsV3 = {
-        apiVersion: "v3",
+        apiVersion: 'v3',
         includeAllIntents: true,
-        includeInstanceData: true,
+        includeInstanceData: true
       };
 
       this.recognizer = new LuisRecognizer(luisConfig, recognizerOptions, true);

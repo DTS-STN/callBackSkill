@@ -1,9 +1,9 @@
-import { RecognizerResult, TurnContext } from "botbuilder";
+import { RecognizerResult, TurnContext } from 'botbuilder';
 import {
   LuisApplication,
   LuisRecognizer,
-  LuisRecognizerOptionsV3,
-} from "botbuilder-ai";
+  LuisRecognizerOptionsV3
+} from 'botbuilder-ai';
 
 export class CallbackRecognizer {
   private recognizer: LuisRecognizer;
@@ -13,9 +13,9 @@ export class CallbackRecognizer {
   constructor(lang: string) {
     // Then change LUIZ appID
 
-    console.log("CallbackRecognizer", lang);
+    console.log('CallbackRecognizer', lang);
 
-    if (lang === "fr") {
+    if (lang === 'fr') {
       this.applicationId = process.env.LuisCallbackAppIdFR;
       this.endpointKey = process.env.LuisCallbackAPIKeyFR;
       this.endpoint = `https://${process.env.LuisCallbackAPIHostNameFR}.cognitiveservices.azure.com/`;
@@ -27,7 +27,7 @@ export class CallbackRecognizer {
     const luisConfig: LuisApplication = {
       applicationId: this.applicationId,
       endpointKey: this.endpointKey,
-      endpoint: this.endpoint,
+      endpoint: this.endpoint
     };
     const luisIsConfigured =
       luisConfig &&
@@ -38,9 +38,9 @@ export class CallbackRecognizer {
       // Set the recognizer options depending on which endpoint version you want to use e.g LuisRecognizerOptionsV2 or LuisRecognizerOptionsV3.
       // More details can be found in https://docs.microsoft.com/en-gb/azure/cognitive-services/luis/luis-migration-api-v3
       const recognizerOptions: LuisRecognizerOptionsV3 = {
-        apiVersion: "v3",
+        apiVersion: 'v3',
         includeAllIntents: true,
-        includeInstanceData: true,
+        includeInstanceData: true
       };
 
       this.recognizer = new LuisRecognizer(luisConfig, recognizerOptions, true);

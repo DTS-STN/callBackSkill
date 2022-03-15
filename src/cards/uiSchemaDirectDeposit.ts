@@ -51,7 +51,7 @@ export const howToFindNumbersSchema = () => {
             {
                 'type': 'Image',
                 'url': `${ i18n.__('unblock_direct_deposit_cheque_path') }`,
-                'altText': `${ i18n.__('unblock_direct_deposit_cheque_altText') }`,
+                'altText': `${ i18n.__('unblock_direct_deposit_cheque_altText') }`
             }
         ]
     };

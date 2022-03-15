@@ -1,10 +1,10 @@
-import * as path from "path";
-import { config } from "dotenv";
+import * as path from 'path';
+import { config } from 'dotenv';
 
 const restify = require('restify');
 // Read environment variables from .env file
 // Import required bot configuration.
-const ENV_FILE = path.join(__dirname, "..", ".env");
+const ENV_FILE = path.join(__dirname, '..', '.env');
 config({ path: ENV_FILE });
 
 // Import required bot services.
@@ -16,13 +16,13 @@ import {
   ConversationState,
   createBotFrameworkAuthenticationFromConfiguration,
   MemoryStorage,
-  UserState,
-} from "botbuilder";
-import { DialogSet } from "botbuilder-dialogs";
+  UserState
+} from 'botbuilder';
+import { DialogSet } from 'botbuilder-dialogs';
 
 // This bot's main dialog.
-import { VirtualAssistantUnblockBot } from "./bots/virtualAssistantUnblockBot";
-import { allowedCallersClaimsValidator, AuthenticationConfiguration, AuthenticationConstants } from "botframework-connector";
+import { VirtualAssistantUnblockBot } from './bots/virtualAssistantUnblockBot';
+import { allowedCallersClaimsValidator, AuthenticationConfiguration, AuthenticationConstants } from 'botframework-connector';
 
 // import i18n from './dialogs/locales/i18nConfig';
 
@@ -34,7 +34,7 @@ server.use(restify.plugins.bodyParser());
 server.listen(process.env.port || process.env.PORT || 39783, () => {
   console.log(`\n${server.name} listening to ${server.url}`);
   console.log(
-    "\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator"
+    '\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator'
   );
   console.log('\nTo talk to your bot, open the emulator select "Open Bot"');
 });
@@ -95,16 +95,16 @@ const onTurnErrorHandler = async (context, error) => {
 
   // Send a trace activity, which will be displayed in Bot Framework Emulator
   await context.sendTraceActivity(
-    "OnTurnError Trace",
+    'OnTurnError Trace',
     `${error}`,
-    "https://www.botframework.com/schemas/error",
-    "TurnError"
+    'https://www.botframework.com/schemas/error',
+    'TurnError'
   );
 
   // Send a message to the user
-  await context.sendActivity("The bot encountered an error or bug.");
+  await context.sendActivity('The bot encountered an error or bug.');
   await context.sendActivity(
-    "To continue to run this bot, please fix the bot source code."
+    'To continue to run this bot, please fix the bot source code.'
   );
 };
 
@@ -120,7 +120,7 @@ const memoryStorage = new MemoryStorage();
 const conversationState = new ConversationState(memoryStorage);
 
 // Create the Dialog State for the bot
-const dialogs = new DialogSet(conversationState.createProperty("DialogState"));
+const dialogs = new DialogSet(conversationState.createProperty('DialogState'));
 
 // Create the User State for the bot
 const userState = new UserState(memoryStorage);
@@ -141,16 +141,16 @@ server.post('/api/messages', async (req, res) => {
 // [OPTIONAL]
 // When deploying azure usually pings the web app server to know the status. The request can be ignored or answered, depending
 // on the implementation. In my case it was logging the errors so I prefer to just reply to the request.
-server.get("/", (req, res, next) => {
+server.get('/', (req, res, next) => {
   res.send(200);
   next();
 });
 // Listen for Upgrade requests for Streaming.
-server.on("upgrade", (req, socket, head) => {
+server.on('upgrade', (req, socket, head) => {
   // Create an adapter scoped to this WebSocket connection to allow storing session data.
   const streamingAdapter = new BotFrameworkAdapter({
     appId: process.env.MicrosoftAppId,
-    appPassword: process.env.MicrosoftAppPassword,
+    appPassword: process.env.MicrosoftAppPassword
   });
 
   // Set onTurnError for the BotFrameworkAdapter created for each connection.

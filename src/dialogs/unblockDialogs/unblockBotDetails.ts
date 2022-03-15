@@ -23,7 +23,7 @@ export class UnblockBotDetails {
     this.errorCount = {
       confirmLookIntoStep: 0,
       unblockDirectDeposit: 0,
-      directDepositErrorStep: 0,
+      directDepositErrorStep: 0
     };
   }
 }

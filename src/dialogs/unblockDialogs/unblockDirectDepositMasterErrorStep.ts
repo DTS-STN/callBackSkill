@@ -3,20 +3,20 @@ import {
     ChoicePrompt,
     ComponentDialog,
     WaterfallDialog,
-    ChoiceFactory,
-  } from "botbuilder-dialogs";
+    ChoiceFactory
+  } from 'botbuilder-dialogs';
 
-  import { LuisRecognizer } from "botbuilder-ai";
+  import { LuisRecognizer } from 'botbuilder-ai';
 
-  import i18n from "../locales/i18nConfig";
-  import { adaptiveCard, TextBlock, TextBlockWithLink } from "../../cards";
-  import { CONFIRM_DIRECT_DEPOSIT_STEP } from "./unblockDirectDeposit";
-  import { UnblockRecognizer } from "./unblockRecognizer";
+  import i18n from '../locales/i18nConfig';
+  import { adaptiveCard, TextBlock, TextBlockWithLink } from '../../cards';
+  import { CONFIRM_DIRECT_DEPOSIT_STEP } from './unblockDirectDeposit';
+  import { UnblockRecognizer } from './unblockRecognizer';
 
-  const TEXT_PROMPT = "TEXT_PROMPT";
-  const CHOICE_PROMPT = "CHOICE_PROMPT";
-  export const UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_STEP = "UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_STEP";
-  const UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_WATERFALL_STEP = "UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_WATERFALL_STEP";
+  const TEXT_PROMPT = 'TEXT_PROMPT';
+  const CHOICE_PROMPT = 'CHOICE_PROMPT';
+  export const UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_STEP = 'UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_STEP';
+  const UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_WATERFALL_STEP = 'UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_WATERFALL_STEP';
   const MAX_ERROR_COUNT = 3;
 
   export class UnblockDirectDepositMasterErrorStep extends ComponentDialog {
@@ -30,7 +30,7 @@ import {
       this.addDialog(
         new WaterfallDialog(UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_WATERFALL_STEP, [
           this.unblockMasterErrorProcessStart.bind(this),
-          this.unblockMasterErrorProcessEnd.bind(this),
+          this.unblockMasterErrorProcessEnd.bind(this)
 
         ])
       );
@@ -58,7 +58,7 @@ import {
       // because  master error already set to send
       if (unblockBotDetails.errorCount.directDepositErrorStep >= MAX_ERROR_COUNT) {
         unblockBotDetails.masterError = true;
-        const errorMsg = i18n.__("unblockBotDialogMasterErrorMsg");
+        const errorMsg = i18n.__('unblockBotDialogMasterErrorMsg');
         await adaptiveCard(stepContext, TextBlock(errorMsg));
         return await stepContext.endDialog(unblockBotDetails);
       }
@@ -72,11 +72,11 @@ import {
       ) {
         // Set dialog messages
         let promptMsg: any;
-        let cardMessage = null;
-        const promptOptions = i18n.__("directDepositMasterErrorPromptRetryOpts");
-        const retryMsg = i18n.__("confirmLookIntoStepRetryMsg");
+        const cardMessage = null;
+        const promptOptions = i18n.__('directDepositMasterErrorPromptRetryOpts');
+        const retryMsg = i18n.__('confirmLookIntoStepRetryMsg');
 
-          promptMsg = i18n.__("directDepositMasterErrorMsg");
+          promptMsg = i18n.__('directDepositMasterErrorMsg');
 
 
         // Setup the prompt
@@ -87,7 +87,7 @@ import {
             stepContext.context,
             promptOptions,
             promptText
-          ),
+          )
         };
 
         return await stepContext.prompt(TEXT_PROMPT, promptDetails);
@@ -105,16 +105,16 @@ import {
 
       // Setup the LUIS to recognize intents
       let luisRecognizer;
-      let lang = "en";
+      let lang = 'en';
       // Language check
 
       // Then change LUIZ appID
       if (
-        stepContext.context.activity.locale.toLowerCase() === "fr-ca" ||
-        stepContext.context.activity.locale.toLowerCase() === "fr-fr" ||
-        stepContext.context.activity.locale.toLowerCase() === "fr"
+        stepContext.context.activity.locale.toLowerCase() === 'fr-ca' ||
+        stepContext.context.activity.locale.toLowerCase() === 'fr-fr' ||
+        stepContext.context.activity.locale.toLowerCase() === 'fr'
       ) {
-        lang = "fr";
+        lang = 'fr';
       }
 
       // LUIZ Recogniser processing
@@ -123,12 +123,12 @@ import {
       const recognizerResult = await luisRecognizer.executeLuisQuery(
         stepContext.context
       );
-      const intent = LuisRecognizer.topIntent(recognizerResult, "None", 0.5);
+      const intent = LuisRecognizer.topIntent(recognizerResult, 'None', 0.5);
 
 
       switch (intent) {
         // route user to callback bot
-        case "promptConfirmYes":
+        case 'promptConfirmYes':
 
           // Do the direct deposit step
           return await stepContext.replaceDialog(
@@ -137,13 +137,13 @@ import {
           );
 
         // route user to always on bot
-        case "promptConfirmNo":
+        case 'promptConfirmNo':
 
           unblockBotDetails.directDepositMasterError = false;
 
-          const text = i18n.__("unblock_lookup_decline_final_text");
-          const link = i18n.__("unblock_lookup_decline_callback_link");
-          const linkText = i18n.__("unblock_lookup_decline_final_link_text");
+          const text = i18n.__('unblock_lookup_decline_final_text');
+          const link = i18n.__('unblock_lookup_decline_callback_link');
+          const linkText = i18n.__('unblock_lookup_decline_final_link_text');
 
           adaptiveCard(stepContext, TextBlockWithLink(text, link, linkText));
           return await stepContext.endDialog(unblockBotDetails);

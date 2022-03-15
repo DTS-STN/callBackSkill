@@ -1,18 +1,18 @@
-import { ComponentDialog, WaterfallDialog } from "botbuilder-dialogs";
-import { ConfirmLookIntoStep, CONFIRM_LOOK_INTO_STEP } from "./unblockLookup";
+import { ComponentDialog, WaterfallDialog } from 'botbuilder-dialogs';
+import { ConfirmLookIntoStep, CONFIRM_LOOK_INTO_STEP } from './unblockLookup';
 
 import {
   UnblockDirectDepositStep,
-  CONFIRM_DIRECT_DEPOSIT_STEP,
-} from "./unblockDirectDeposit";
+  CONFIRM_DIRECT_DEPOSIT_STEP
+} from './unblockDirectDeposit';
 
-import i18n from "../locales/i18nConfig";
-import { CallbackBotDialog } from "../callbackDialogs/callbackBotDialog";
-import { TextBlock, adaptiveCard } from "../../cards";
-import { UnblockDirectDepositMasterErrorStep, UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_STEP } from "./unblockDirectDepositMasterErrorStep";
+import i18n from '../locales/i18nConfig';
+import { CallbackBotDialog } from '../callbackDialogs/callbackBotDialog';
+import { TextBlock, adaptiveCard } from '../../cards';
+import { UnblockDirectDepositMasterErrorStep, UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_STEP } from './unblockDirectDepositMasterErrorStep';
 
-export const UNBLOCK_BOT_DIALOG = "UNBLOCK_BOT_DIALOG";
-const MAIN_UNBLOCK_BOT_WATERFALL_DIALOG = "MAIN_UNBLOCK_BOT_WATERFALL_DIALOG";
+export const UNBLOCK_BOT_DIALOG = 'UNBLOCK_BOT_DIALOG';
+const MAIN_UNBLOCK_BOT_WATERFALL_DIALOG = 'MAIN_UNBLOCK_BOT_WATERFALL_DIALOG';
 
 export class UnblockBotDialog extends ComponentDialog {
   constructor() {
@@ -30,7 +30,7 @@ export class UnblockBotDialog extends ComponentDialog {
         this.confirmLookIntoStep.bind(this),
         this.unblockDirectDepositStep.bind(this),
         this.unblockMasterErrorStep.bind(this),
-        this.finalStep.bind(this),
+        this.finalStep.bind(this)
       ])
     );
 
@@ -49,7 +49,7 @@ export class UnblockBotDialog extends ComponentDialog {
 
     await adaptiveCard(
       stepContext,
-      TextBlock(i18n.__("unblock_lookup_welcome_msg"))
+      TextBlock(i18n.__('unblock_lookup_welcome_msg'))
     );
     return await stepContext.next(unblockBotDetails);
   }
@@ -163,7 +163,7 @@ export class UnblockBotDialog extends ComponentDialog {
 
     // Check if a master error has occurred
     if (unblockBotDetails !== undefined && unblockBotDetails.masterError) {
-      const masterErrorMsg = i18n.__("masterErrorMsg");
+      const masterErrorMsg = i18n.__('masterErrorMsg');
       await stepContext.context.sendActivity(masterErrorMsg);
     }
 

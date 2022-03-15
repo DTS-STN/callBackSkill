@@ -74,8 +74,8 @@ export class VirtualAssistantCallbackBot extends ActivityHandler {
     }
 
     /**
-   * Override the ActivityHandler.run() method to save state changes after the bot logic completes.
-   */
+     * Override the ActivityHandler.run() method to save state changes after the bot logic completes.
+     */
     public async run(context) {
         await super.run(context);
 

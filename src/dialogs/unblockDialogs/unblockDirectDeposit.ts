@@ -2,34 +2,34 @@ import {
   TextPrompt,
   ChoicePrompt,
   ComponentDialog,
-  WaterfallDialog,
-} from "botbuilder-dialogs";
+  WaterfallDialog
+} from 'botbuilder-dialogs';
 
-import i18n from "../locales/i18nConfig";
+import i18n from '../locales/i18nConfig';
 
 import {
   whatNumbersToFindSchema,
   howToFindNumbersSchema,
   TwoTextBlock,
   TextBlock,
-  adaptiveCard,
-} from "../../cards";
+  adaptiveCard
+} from '../../cards';
 
 import {
   CallbackBotDialog,
-  CALLBACK_BOT_DIALOG,
-} from "../callbackDialogs/callbackBotDialog";
-import { CallbackBotDetails } from "../callbackDialogs/callbackBotDetails";
-import { UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_STEP } from "./unblockDirectDepositMasterErrorStep";
+  CALLBACK_BOT_DIALOG
+} from '../callbackDialogs/callbackBotDialog';
+import { CallbackBotDetails } from '../callbackDialogs/callbackBotDetails';
+import { UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_STEP } from './unblockDirectDepositMasterErrorStep';
 
-const TEXT_PROMPT = "TEXT_PROMPT";
-const CHOICE_PROMPT = "CHOICE_PROMPT";
-export const CONFIRM_DIRECT_DEPOSIT_STEP = "CONFIRM_DIRECT_DEPOSIT_STEP";
-const CONFIRM_DIRECT_DEPOSIT_WATERFALL_STEP = "CONFIRM_DIRECT_DEPOSIT_WATERFALL_STEP";
+const TEXT_PROMPT = 'TEXT_PROMPT';
+const CHOICE_PROMPT = 'CHOICE_PROMPT';
+export const CONFIRM_DIRECT_DEPOSIT_STEP = 'CONFIRM_DIRECT_DEPOSIT_STEP';
+const CONFIRM_DIRECT_DEPOSIT_WATERFALL_STEP = 'CONFIRM_DIRECT_DEPOSIT_WATERFALL_STEP';
 
 // Error handling
 const MAX_ERROR_COUNT = 3;
-let ACCOUNT = false;
+const ACCOUNT = false;
 let TRANSIT = false;
 let INSTITUTE = false;
 
@@ -45,7 +45,7 @@ export class UnblockDirectDepositStep extends ComponentDialog {
       new WaterfallDialog(CONFIRM_DIRECT_DEPOSIT_WATERFALL_STEP, [
         this.unblockDirectDepositStart.bind(this),
         this.unblockBankDetails.bind(this),
-        this.unblockDirectDepositEnd.bind(this),
+        this.unblockDirectDepositEnd.bind(this)
       ])
     );
 
@@ -81,30 +81,30 @@ export class UnblockDirectDepositStep extends ComponentDialog {
       unblockBotDetails.unblockDirectDeposit === 0
     ) {
       // Set dialog messages
-      let promptMsg = "";
-      let retryMsg = "";
+      let promptMsg = '';
+      let retryMsg = '';
 
       // State of unblock direct deposit determines message prompts
       if (INSTITUTE === true) {
         // ACCOUNT
-        promptMsg = i18n.__("unblock_direct_deposit_account");
-        retryMsg = i18n.__("unblock_direct_deposit_account_retry");
+        promptMsg = i18n.__('unblock_direct_deposit_account');
+        retryMsg = i18n.__('unblock_direct_deposit_account_retry');
 
         if (unblockBotDetails.unblockDirectDeposit === -1) {
           await adaptiveCard(stepContext, TextBlock(retryMsg));
         }
       } else if (TRANSIT === true) {
         // INSTITUTE
-        promptMsg = i18n.__("unblock_direct_deposit_institute");
-        retryMsg = i18n.__("unblock_direct_deposit_institute_retry");
+        promptMsg = i18n.__('unblock_direct_deposit_institute');
+        retryMsg = i18n.__('unblock_direct_deposit_institute_retry');
 
         if (unblockBotDetails.unblockDirectDeposit === -1) {
           await adaptiveCard(stepContext, TextBlock(retryMsg));
         }
       } else {
         // TRANSIT
-        promptMsg = i18n.__("unblock_direct_deposit_transit");
-        retryMsg = i18n.__("unblock_direct_deposit_transit_retry");
+        promptMsg = i18n.__('unblock_direct_deposit_transit');
+        retryMsg = i18n.__('unblock_direct_deposit_transit_retry');
 
         if (unblockBotDetails.unblockDirectDeposit === -1) {
           await adaptiveCard(stepContext, TextBlock(retryMsg));
@@ -189,10 +189,10 @@ export class UnblockDirectDepositStep extends ComponentDialog {
   async unblockDirectDepositEnd(stepContext: any) {
     // Set the messages
     const unblockBotDetails = stepContext.options ;
-    const validReminder = i18n.__("unblock_direct_deposit_valid_reminder");
-    const doneMsg = i18n.__("unblock_direct_deposit_complete");
-    const validMsg = i18n.__("unblock_direct_deposit_valid_msg");
-    const tipMsg = i18n.__("unblock_direct_deposit_valid_tip");
+    const validReminder = i18n.__('unblock_direct_deposit_valid_reminder');
+    const doneMsg = i18n.__('unblock_direct_deposit_complete');
+    const validMsg = i18n.__('unblock_direct_deposit_valid_msg');
+    const tipMsg = i18n.__('unblock_direct_deposit_valid_tip');
 
     // Display the prompts
     await adaptiveCard(stepContext, TwoTextBlock(validMsg, tipMsg));
