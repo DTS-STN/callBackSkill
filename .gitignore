@@ -6,6 +6,7 @@ lib/
 
 # Environment variables
 .env.*
+.env
 
 # Bot Files
 *.bot
