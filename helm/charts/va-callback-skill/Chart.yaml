@@ -1,0 +1,5 @@
+apiVersion: v1
+appVersion: "1.0"
+description: Callback skill MVP
+name: va-callback-skill
+version: 0.0.1

@@ -1,0 +1,23 @@
+environments:
+  benrd:
+  bingrd:
+  dev:
+  prod-blue:
+  prod-green:
+  prototype:
+
+
+releases:
+
+  - name: va-callback-skill-{{ requiredEnv "BRANCH" }}
+    chart: ../helm/charts/va-callback-skill
+    namespace: va-callback-skill-{{ requiredEnv "BRANCH" }}
+    values:
+      - overrides/va-callback-skill.yaml.gotmpl
+    labels:
+        category: prototype
+        app: va-callback-skill
+        tier: api
+    wait: false
+    installed: true
+    force: false
