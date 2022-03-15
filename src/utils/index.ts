@@ -3,5 +3,5 @@
  * Licensed under the MIT License.
  */
 
- export * from './guidHelper';
- export * from './luisAppSetup';
+export * from './guidHelper';
+export * from './luisAppSetup';

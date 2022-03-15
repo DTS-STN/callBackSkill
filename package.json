@@ -1,5 +1,5 @@
 {
-    "name": "skill",
+    "name": "callback-skill",
     "version": "1.0.0",
     "description": "Learning skills development",
     "author": "",
@@ -12,7 +12,7 @@
         "build": "tsc --p tsconfig.json && npm run copy-templates",
         "lint": "eslint ./src/**/*.ts",
         "lint-fix": "eslint --fix ./src/**/*.ts",
-        "start": "npm run build && node ./lib/app.js NODE_ENV=development",
+        "start": "npm run build && nodemon --exec ts-node src/app.ts",
         "watch": "nodemon ./lib/index.js NODE_ENV=development",
         "test": "mocha",
         "coverage": "nyc mocha",
