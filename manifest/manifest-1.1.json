@@ -19,7 +19,7 @@
         "protocol": "BotFrameworkV3",
         "description": "Production endpoint for the skill",
         "endpointUrl": "https://va-callback-skill-develop.bdm-dev.dts-stn.com/api/messages",
-        "msAppId": "646686e5-3ff4-4a7b-a574-11638fbe9b07"
+        "msAppId": "d266560d-d161-4b19-a206-5c5c7718d662"
       }
     ],
     "dispatchModels": {
