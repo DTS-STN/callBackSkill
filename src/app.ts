@@ -31,7 +31,7 @@ const server = restify.createServer();
 server.use(restify.plugins.bodyParser());
 
 // server.use(i18n.init);
-server.listen(process.env.port || process.env.PORT || 39783, () => {
+server.listen(process.env.port || process.env.PORT || 3978, () => {
   console.log(`\n${server.name} listening to ${server.url}`);
   console.log(
     "\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator"
