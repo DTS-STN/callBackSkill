@@ -17,7 +17,9 @@ const TEXT_PROMPT = 'TEXT_PROMPT';
 export const CONFIRM_EMAIL_STEP = 'CONFIRM_EMAIL_STEP';
 const CONFIRM_EMAIL_WATERFALL_STEP = 'CONFIRM_EMAIL_WATERFALL_STEP';
 
-const MAX_ERROR_COUNT = 3;
+import { MAX_ERROR_COUNT}  from '../../utils'
+import { adaptiveCard, TextBlock } from '../../cards';
+import { callbackCard } from '../../cards/callbackCard';
 
 export class ConfirmEmailStep extends ComponentDialog {
   constructor() {
@@ -56,10 +58,8 @@ export class ConfirmEmailStep extends ComponentDialog {
       callbackBotDetails.masterError = true;
 
       // Set master error message to send
-      const errorMsg = i18n.__('masterErrorMsg');
-
-      // Send master error message
-      await stepContext.context.sendActivity(errorMsg);
+      const errorMsg = i18n.__(`MasterRetryExceededMessage`);
+      await adaptiveCard(stepContext, callbackCard(stepContext.context.activity.locale,errorMsg));
 
       // End the dialog and pass the updated details state machine
       return await stepContext.endDialog(callbackBotDetails);

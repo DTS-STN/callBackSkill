@@ -4,12 +4,14 @@ import {
   ComponentDialog,
   WaterfallDialog,
   WaterfallStepContext,
-  ChoiceFactory
+  ChoiceFactory,
+  ListStyle,
+  ChoicePrompt
 } from 'botbuilder-dialogs';
 import { CallbackBotDetails } from './callbackBotDetails';
 import { CallbackRecognizer } from './callbackRecognizer';
 import { GET_PREFERRED_METHOD_OF_CONTACT_STEP } from './getPreferredMethodOfContactStep';
-
+import validatePhoneNumber from '../../utils/validateCanadianPhoneNumber';
 import i18n from '../locales/i18nConfig';
 
 const TEXT_PROMPT = 'TEXT_PROMPT';
@@ -17,14 +19,19 @@ export const GET_USER_PHONE_NUMBER_STEP = 'GET_USER_PHONE_NUMBER_STEP';
 const GET_USER_PHONE_NUMBER_WATERFALL_STEP =
   'GET_USER_PHONE_NUMBER_WATERFALL_STEP';
 
-const MAX_ERROR_COUNT = 3;
-
+import { MAX_ERROR_COUNT}  from '../../utils'
+import { adaptiveCard } from '../../cards';
+import { callbackCard } from '../../cards/callbackCard';
+import { CommonPromptValidatorModel } from '../../models/commonPromptValidatorModel';
+import { ALWAYS_ON_BOT_DIALOG } from '../alwaysOnDialogs/alwaysOnBotDialog';
+const CHOICE_PROMPT = 'CHOICE_PROMPT';
 export class GetUserPhoneNumberStep extends ComponentDialog {
   constructor() {
     super(GET_USER_PHONE_NUMBER_STEP);
 
     // Add a text prompt to the dialog stack
     this.addDialog(new TextPrompt(TEXT_PROMPT));
+    this.addDialog(new ChoicePrompt(CHOICE_PROMPT))
 
     this.addDialog(
       new WaterfallDialog(GET_USER_PHONE_NUMBER_WATERFALL_STEP, [
@@ -62,23 +69,19 @@ export class GetUserPhoneNumberStep extends ComponentDialog {
         callbackBotDetails.masterError = true;
         //  Send master error message
         // Set master error message to send
-        const errorMsg = i18n.__('masterErrorMsg');
-        await stepContext.context.sendActivity(errorMsg);
+        const errorMsg = i18n.__(`MasterRetryExceededMessage`);
+      await adaptiveCard(stepContext, callbackCard(stepContext.context.activity.locale,errorMsg));
         // End the dialog and pass the updated details state machine
         return await stepContext.endDialog(callbackBotDetails);
       } else {
         const errorMsg = i18n.__('phoneNumberFormatMaxErrorMsg');
 
         const promptOptions = i18n.__('confirmEmailStepErrorPromptOptions');
-
-        const promptDetails = {
-          prompt: ChoiceFactory.forChannel(
-            stepContext.context,
-            promptOptions,
-            errorMsg
-          )
-        };
-        return await stepContext.prompt(TEXT_PROMPT, promptDetails);
+        return await stepContext.prompt(CHOICE_PROMPT, {
+          prompt: errorMsg,
+          choices: ChoiceFactory.toChoices(promptOptions),
+          style: ListStyle.suggestedAction
+      });
       }
     }
 
@@ -138,7 +141,7 @@ export class GetUserPhoneNumberStep extends ComponentDialog {
       // Proceed
       case 'promptConfirmChoiceText':
       case 'promptConfirmYes':
-        console.log('INTENT getUserPhone: ', intent);
+      case 'promptTryAgainYes':
         callbackBotDetails.getPreferredMethodOfContactStep = null;
         callbackBotDetails.confirmPhoneStep = null;
         callbackBotDetails.getUserPhoneNumberStep = null;
@@ -150,20 +153,21 @@ export class GetUserPhoneNumberStep extends ComponentDialog {
           callbackBotDetails
         );
       case 'promptConfirmNo':
-        console.log('INTENT getUserPhone: ', intent);
+      case 'NoNotForNow':
 
-        return await stepContext.endDialog(callbackBotDetails);
+        const commonPromptValidatorModel = new CommonPromptValidatorModel();
+        // call dialog
+        return await stepContext.replaceDialog(ALWAYS_ON_BOT_DIALOG, commonPromptValidatorModel);
+
       // Could not understand / None intent
       default: {
         // Catch all
-        console.log('NONE INTENT');
-        // Result has come through
         const results = stepContext.result;
         if (results) {
           // phone number validation
-          const re =
-            /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
-          if (re.test(String(results).toLowerCase())) {
+
+          const  validPhoneNumber  = validatePhoneNumber(results)
+          if (validPhoneNumber) {
             const confirmMsg = i18n.__('getUserPhoneConfirmMsg');
             callbackBotDetails.confirmPhoneStep = true;
             callbackBotDetails.getUserPhoneNumberStep = true;

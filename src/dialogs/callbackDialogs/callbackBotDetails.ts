@@ -3,7 +3,6 @@
 
 export class CallbackBotDetails {
   public masterError;
-  public confirmCallbackStep;
   public directDepositErrorCallback;
   public confirmCallbackDetailsStep;
   public getUserPhoneNumberStep;
@@ -24,11 +23,11 @@ export class CallbackBotDetails {
   public preferredEmailAndText;
   public directDepositError;
   public confirmCallbackPhoneNumberStep;
+  public nextOptionStep;
   constructor() {
     // Master error - flag that is thrown when we hit a critical error in the conversation flow
     this.masterError = null;
 
-    this.confirmCallbackStep = null;
     this.preferredEmail = null;
     this.preferredText = null;
     this.preferredEmailAndText = null;
@@ -49,10 +48,9 @@ export class CallbackBotDetails {
     this.time = '';
     this.authCode = '';
     this.confirmCallbackPhoneNumberStep = null;
-
+    this.nextOptionStep = null;
     // State machine that stores the error counts of each step
     this.errorCount = {
-      confirmCallbackStep: 0,
       getUserPhoneNumberStep: 0,
       getPreferredCallbackDateAndTimeStep: 0,
       confirmCallbackDetailsStep: 0,
@@ -62,32 +60,9 @@ export class CallbackBotDetails {
       getPreferredMethodOfContactStep: 0,
       confirmEmailStep: 0,
       confirmPhoneStep: 0,
-      confirmCallbackPhoneNumberStep: 0
+      confirmCallbackPhoneNumberStep: 0,
+      nextOptionStep: 0
     };
-
-    // TODO: Refactor and add an object that tracks status perhaps something like below
-    /*
-        this.currentStep = '';
-        this.steps = [
-            'confirmLookIntoStep',
-            'confirmSendEmailStep',
-            'getAndSendEmailStep',
-            'confirmNotifyROEReceivedStep',
-        ]
-        */
   }
-  public toString = () =>
-    JSON.stringify(
-      Object.assign(
-        {},
-        {
-          phoneNumber: this.phoneNumber,
-          date: this.date,
-          time: this.time,
-          authCode: this.authCode
-        }
-      ),
-      null,
-      '  '
-    );
-}
+
+  }
