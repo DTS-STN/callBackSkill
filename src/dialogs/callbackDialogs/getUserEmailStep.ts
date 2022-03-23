@@ -4,19 +4,22 @@ import {
   ComponentDialog,
   WaterfallDialog,
   WaterfallStepContext,
-  ChoiceFactory
+  ChoiceFactory,
+  ChoicePrompt,
+  ListStyle
 } from 'botbuilder-dialogs';
 
 import { CallbackBotDetails } from './callbackBotDetails';
 import { CallbackRecognizer } from './callbackRecognizer';
-import { CONFIRM_EMAIL_STEP } from './confirmEmailStep';
 import { GET_PREFERRED_METHOD_OF_CONTACT_STEP } from './getPreferredMethodOfContactStep';
 import i18n from '../locales/i18nConfig';
-
+const CHOICE_PROMPT = 'CHOICE_PROMPT';
 const TEXT_PROMPT = 'TEXT_PROMPT';
 export const GET_USER_EMAIL_STEP = 'GET_USER_EMAIL_STEP';
 const GET_USER_EMAIL_WATERFALL_STEP = 'GET_USER_EMAIL_WATERFALL_STEP';
-const MAX_ERROR_COUNT = 3;
+import { MAX_ERROR_COUNT}  from '../../utils'
+import { CommonPromptValidatorModel } from '../../models/commonPromptValidatorModel';
+import { AlwaysOnBotDialog, ALWAYS_ON_BOT_DIALOG } from '../alwaysOnDialogs/alwaysOnBotDialog';
 
 export class GetUserEmailStep extends ComponentDialog {
   constructor() {
@@ -24,7 +27,8 @@ export class GetUserEmailStep extends ComponentDialog {
 
     // Add a text prompt to the dialog stack
     this.addDialog(new TextPrompt(TEXT_PROMPT));
-
+    this.addDialog(new ChoicePrompt(CHOICE_PROMPT))
+    // this.addDialog(new AlwaysOnBotDialog());
     this.addDialog(
       new WaterfallDialog(GET_USER_EMAIL_WATERFALL_STEP, [
         this.initialStep.bind(this),
@@ -51,11 +55,7 @@ export class GetUserEmailStep extends ComponentDialog {
     // Check if the error count is greater than the max threshold
     if (callbackBotDetails.errorCount.getUserEmailStep >= MAX_ERROR_COUNT) {
       // Throw the master error flag
-      // callbackBotDetails.masterError = true;
       const errorMsg = i18n.__('emailFormatMaxErrorMsg');
-
-      // Send master error message
-      // await stepContext.context.sendActivity(errorMsg);
 
       const promptOptions = i18n.__('confirmEmailStepErrorPromptOptions');
 
@@ -66,10 +66,14 @@ export class GetUserEmailStep extends ComponentDialog {
           errorMsg
         )
       };
-      return await stepContext.prompt(TEXT_PROMPT, promptDetails);
-      // End the dialog and pass the updated details state machine
 
-      // return await stepContext.endDialog(callbackBotDetails);
+
+      return await stepContext.prompt(CHOICE_PROMPT, {
+        prompt: errorMsg,
+        choices: ChoiceFactory.toChoices(promptOptions),
+        style: ListStyle.suggestedAction
+    });
+
     }
     // Check the user state to see if unblockBotDetails.getAndSendEmailStep is set to null or -1
     // If it is in the error state (-1) or or is set to null prompt the user
@@ -107,7 +111,8 @@ export class GetUserEmailStep extends ComponentDialog {
     // Then change LUIZ appID
     if (
       stepContext.context.activity.locale.toLowerCase() === 'fr-ca' ||
-      stepContext.context.activity.locale.toLowerCase() === 'fr-fr'
+      stepContext.context.activity.locale.toLowerCase() === 'fr-fr' ||
+      stepContext.context.activity.locale.toLowerCase() === 'fr'
     ) {
       lang = 'fr';
     }
@@ -128,6 +133,7 @@ export class GetUserEmailStep extends ComponentDialog {
       case 'promptConfirmSendEmailYes':
       case 'promptConfirmNotifyYes':
       case 'promptConfirmYes':
+      case 'promptTryAgainYes':
         console.log('INTENT: ', intent);
         callbackBotDetails.getPreferredMethodOfContactStep = null;
         callbackBotDetails.confirmEmailStep = null;
@@ -143,9 +149,11 @@ export class GetUserEmailStep extends ComponentDialog {
       // Don't Proceed
       case 'promptConfirmEmailNo':
       case 'promptConfirmNo':
-        console.log('INTENT: ', intent);
+      case 'NoNotForNow':
+       const commonPromptValidatorModel = new CommonPromptValidatorModel();
+      // call dialog
+      return await stepContext.beginDialog(ALWAYS_ON_BOT_DIALOG, commonPromptValidatorModel);
 
-        return await stepContext.endDialog(callbackBotDetails);
       // Could not understand / None intent
       default: {
         // Catch all

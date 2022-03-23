@@ -2,7 +2,8 @@ import {
   TextPrompt,
   ChoicePrompt,
   ComponentDialog,
-  WaterfallDialog
+  WaterfallDialog,
+  ChoiceFactory
 } from 'botbuilder-dialogs';
 
 import i18n from '../locales/i18nConfig';
@@ -28,7 +29,9 @@ export const CONFIRM_DIRECT_DEPOSIT_STEP = 'CONFIRM_DIRECT_DEPOSIT_STEP';
 const CONFIRM_DIRECT_DEPOSIT_WATERFALL_STEP = 'CONFIRM_DIRECT_DEPOSIT_WATERFALL_STEP';
 
 // Error handling
-const MAX_ERROR_COUNT = 3;
+import { MAX_ERROR_COUNT}  from '../../utils'
+import { UnblockRecognizer } from './unblockRecognizer';
+import { LuisRecognizer } from 'botbuilder-ai';
 const ACCOUNT = false;
 let TRANSIT = false;
 let INSTITUTE = false;
@@ -189,17 +192,21 @@ export class UnblockDirectDepositStep extends ComponentDialog {
   async unblockDirectDepositEnd(stepContext: any) {
     // Set the messages
     const unblockBotDetails = stepContext.options ;
-    const validReminder = i18n.__('unblock_direct_deposit_valid_reminder');
+    // const validReminder = i18n.__('unblock_direct_deposit_valid_reminder');
     const doneMsg = i18n.__('unblock_direct_deposit_complete');
     const validMsg = i18n.__('unblock_direct_deposit_valid_msg');
     const tipMsg = i18n.__('unblock_direct_deposit_valid_tip');
 
     // Display the prompts
     await adaptiveCard(stepContext, TwoTextBlock(validMsg, tipMsg));
-    await adaptiveCard(stepContext, TextBlock(validReminder));
+    // await adaptiveCard(stepContext, TextBlock(validReminder));
     await adaptiveCard(stepContext, TextBlock(doneMsg));
+
     unblockBotDetails.directDepositMasterError = false;
     // End the dialog
     return await stepContext.endDialog(unblockBotDetails);
   }
+
+
+
 }
