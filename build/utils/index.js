@@ -14,6 +14,8 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !exports.hasOwnProperty(p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.MAX_ERROR_COUNT = void 0;
+exports.MAX_ERROR_COUNT = 2;
 __exportStar(require("./guidHelper"), exports);
-__exportStar(require("./luisAppSetup"), exports);
+__exportStar(require("./validateCanadianPhoneNumber"), exports);
 //# sourceMappingURL=index.js.map

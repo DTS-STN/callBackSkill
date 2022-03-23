@@ -5,16 +5,15 @@ const botbuilder_ai_1 = require("botbuilder-ai");
 class CallbackRecognizer {
     constructor(lang) {
         // Then change LUIZ appID
-        console.log('CallbackRecognizer', lang);
         if (lang === 'fr') {
-            this.applicationId = process.env.LuisCallbackAppIdFR;
-            this.endpointKey = process.env.LuisCallbackAPIKeyFR;
-            this.endpoint = `https://${process.env.LuisCallbackAPIHostNameFR}.cognitiveservices.azure.com/`;
+            this.applicationId = process.env.LuisAppIdFR;
+            this.endpointKey = process.env.LuisAPIKeyFR;
+            this.endpoint = `https://${process.env.LuisAPIHostNameFR}.cognitiveservices.azure.com`;
         }
         else {
-            this.applicationId = process.env.LuisCallbackAppIdEN;
-            this.endpointKey = process.env.LuisCallbackAPIKeyEN;
-            this.endpoint = `https://${process.env.LuisCallbackAPIHostNameEN}.cognitiveservices.azure.com/`;
+            this.applicationId = process.env.LuisAppIdEN;
+            this.endpointKey = process.env.LuisAPIKeyEN;
+            this.endpoint = `https://${process.env.LuisAPIHostNameEN}.cognitiveservices.azure.com`;
         }
         const luisConfig = {
             applicationId: this.applicationId,

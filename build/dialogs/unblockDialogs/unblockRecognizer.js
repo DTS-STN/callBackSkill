@@ -8,12 +8,12 @@ class UnblockRecognizer {
         if (lang === 'fr') {
             this.applicationId = process.env.LuisAppIdFR;
             this.endpointKey = process.env.LuisAPIKeyFR;
-            this.endpoint = `https://${process.env.LuisAPIHostNameFR}.cognitiveservices.azure.com/`;
+            this.endpoint = `https://${process.env.LuisAPIHostNameFR}.cognitiveservices.azure.com`;
         }
         else {
             this.applicationId = process.env.LuisAppIdEN;
             this.endpointKey = process.env.LuisAPIKeyEN;
-            this.endpoint = `https://${process.env.LuisAPIHostNameEN}.cognitiveservices.azure.com/`;
+            this.endpoint = `https://${process.env.LuisAPIHostNameEN}.cognitiveservices.azure.com`;
         }
         const luisConfig = {
             applicationId: this.applicationId,

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LUISUnblockSetup = void 0;
 const botbuilder_ai_1 = require("botbuilder-ai");
-exports.LUISUnblockSetup = (stepContext) => {
+const LUISUnblockSetup = (stepContext) => {
     // Luis Application Settings
     let applicationId;
     let endpointKey;
@@ -32,4 +32,5 @@ exports.LUISUnblockSetup = (stepContext) => {
     }, true);
     return recognizer;
 };
+exports.LUISUnblockSetup = LUISUnblockSetup;
 //# sourceMappingURL=luisAppSetup.js.map

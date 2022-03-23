@@ -12,7 +12,9 @@ const callbackRecognizer_1 = require("./callbackRecognizer");
 const TEXT_PROMPT = 'TEXT_PROMPT';
 exports.CONFIRM_EMAIL_STEP = 'CONFIRM_EMAIL_STEP';
 const CONFIRM_EMAIL_WATERFALL_STEP = 'CONFIRM_EMAIL_WATERFALL_STEP';
-const MAX_ERROR_COUNT = 3;
+const utils_1 = require("../../utils");
+const cards_1 = require("../../cards");
+const callbackCard_1 = require("../../cards/callbackCard");
 class ConfirmEmailStep extends botbuilder_dialogs_1.ComponentDialog {
     constructor() {
         super(exports.CONFIRM_EMAIL_STEP);
@@ -36,13 +38,12 @@ class ConfirmEmailStep extends botbuilder_dialogs_1.ComponentDialog {
         // Set the text for the retry prompt
         const retryMsg = i18nConfig_1.default.__('confirmEmailStepRetryMsg');
         // Check if the error count is greater than the max threshold
-        if (callbackBotDetails.errorCount.confirmEmailStep >= MAX_ERROR_COUNT) {
+        if (callbackBotDetails.errorCount.confirmEmailStep >= utils_1.MAX_ERROR_COUNT) {
             // Throw the master error flag
             callbackBotDetails.masterError = true;
             // Set master error message to send
-            const errorMsg = i18nConfig_1.default.__('masterErrorMsg');
-            // Send master error message
-            await stepContext.context.sendActivity(errorMsg);
+            const errorMsg = i18nConfig_1.default.__(`MasterRetryExceededMessage`);
+            await cards_1.adaptiveCard(stepContext, callbackCard_1.callbackCard(stepContext.context.activity.locale, errorMsg));
             // End the dialog and pass the updated details state machine
             return await stepContext.endDialog(callbackBotDetails);
         }

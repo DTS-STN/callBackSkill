@@ -8,24 +8,31 @@ const botbuilder_dialogs_1 = require("botbuilder-dialogs");
 const botbuilder_ai_1 = require("botbuilder-ai");
 const i18nConfig_1 = __importDefault(require("../locales/i18nConfig"));
 const cards_1 = require("../../cards");
-const unblockDirectDeposit_1 = require("./unblockDirectDeposit");
 const unblockRecognizer_1 = require("./unblockRecognizer");
+const callbackBotDialog_1 = require("../callbackDialogs/callbackBotDialog");
+const callbackBotDetails_1 = require("../callbackDialogs/callbackBotDetails");
 const TEXT_PROMPT = 'TEXT_PROMPT';
 const CHOICE_PROMPT = 'CHOICE_PROMPT';
 exports.UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_STEP = 'UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_STEP';
 const UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_WATERFALL_STEP = 'UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_WATERFALL_STEP';
-const MAX_ERROR_COUNT = 3;
+const utils_1 = require("../../utils");
+const alwaysOnBotDialog_1 = require("../alwaysOnDialogs/alwaysOnBotDialog");
+const unblockNext_1 = require("./unblockNext");
 class UnblockDirectDepositMasterErrorStep extends botbuilder_dialogs_1.ComponentDialog {
     constructor() {
         super(exports.UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_STEP);
         // Add a text prompt to the dialog stack
         this.addDialog(new botbuilder_dialogs_1.TextPrompt(TEXT_PROMPT));
-        this.addDialog(new botbuilder_dialogs_1.ChoicePrompt(CHOICE_PROMPT));
+        this.addDialog(new botbuilder_dialogs_1.ChoicePrompt(CHOICE_PROMPT, this.CustomChoiceValidator));
+        this.addDialog(new alwaysOnBotDialog_1.AlwaysOnBotDialog());
         this.addDialog(new botbuilder_dialogs_1.WaterfallDialog(UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_WATERFALL_STEP, [
             this.unblockMasterErrorProcessStart.bind(this),
             this.unblockMasterErrorProcessEnd.bind(this)
         ]));
         this.initialDialogId = UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_WATERFALL_STEP;
+    }
+    async CustomChoiceValidator(promptContext) {
+        return true;
     }
     /**
      * Initial step in the waterfall. This will kick of the ConfirmLookIntoStep step
@@ -44,7 +51,7 @@ class UnblockDirectDepositMasterErrorStep extends botbuilder_dialogs_1.Component
         // Check if the error count is greater than the max threshold
         // Throw the master error flag
         // because  master error already set to send
-        if (unblockBotDetails.errorCount.directDepositErrorStep >= MAX_ERROR_COUNT) {
+        if (unblockBotDetails.errorCount.directDepositErrorStep >= utils_1.MAX_ERROR_COUNT) {
             unblockBotDetails.masterError = true;
             const errorMsg = i18nConfig_1.default.__('unblockBotDialogMasterErrorMsg');
             await cards_1.adaptiveCard(stepContext, cards_1.TextBlock(errorMsg));
@@ -59,14 +66,15 @@ class UnblockDirectDepositMasterErrorStep extends botbuilder_dialogs_1.Component
             let promptMsg;
             const cardMessage = null;
             const promptOptions = i18nConfig_1.default.__('directDepositMasterErrorPromptRetryOpts');
-            const retryMsg = i18nConfig_1.default.__('confirmLookIntoStepRetryMsg');
+            const retryMsg = i18nConfig_1.default.__('confirmCallbackStepRetryMsg');
             promptMsg = i18nConfig_1.default.__('directDepositMasterErrorMsg');
             // Setup the prompt
-            const promptText = unblockBotDetails.confirmLookIntoStep === -1 ? retryMsg : promptMsg;
-            const promptDetails = {
-                prompt: botbuilder_dialogs_1.ChoiceFactory.forChannel(stepContext.context, promptOptions, promptText)
-            };
-            return await stepContext.prompt(TEXT_PROMPT, promptDetails);
+            const promptText = unblockBotDetails.directDepositMasterError === -1 ? retryMsg : promptMsg;
+            return await stepContext.prompt(CHOICE_PROMPT, {
+                prompt: promptText,
+                choices: botbuilder_dialogs_1.ChoiceFactory.toChoices(promptOptions),
+                style: botbuilder_dialogs_1.ListStyle.suggestedAction
+            });
         }
         else {
             return await stepContext.next(false);
@@ -96,16 +104,20 @@ class UnblockDirectDepositMasterErrorStep extends botbuilder_dialogs_1.Component
         switch (intent) {
             // route user to callback bot
             case 'promptConfirmYes':
-                // Do the direct deposit step
-                return await stepContext.replaceDialog(unblockDirectDeposit_1.CONFIRM_DIRECT_DEPOSIT_STEP, unblockBotDetails);
+            case 'YesIWantToRequestCall':
+            case 'promptConfirmCallbackYes':
+                unblockBotDetails.directDepositErrorStep = true;
+                const callbackErrorCause = new callbackBotDetails_1.CallbackBotDetails();
+                callbackErrorCause.directDepositError = true;
+                // go to call back bot step
+                return await stepContext.replaceDialog(callbackBotDialog_1.CALLBACK_BOT_DIALOG, callbackErrorCause);
             // route user to always on bot
-            case 'promptConfirmNo':
+            case 'NoNotForNow':
                 unblockBotDetails.directDepositMasterError = false;
-                const text = i18nConfig_1.default.__('unblock_lookup_decline_final_text');
-                const link = i18nConfig_1.default.__('unblock_lookup_decline_callback_link');
-                const linkText = i18nConfig_1.default.__('unblock_lookup_decline_final_link_text');
-                cards_1.adaptiveCard(stepContext, cards_1.TextBlockWithLink(text, link, linkText));
-                return await stepContext.endDialog(unblockBotDetails);
+                // const commonPromptValidatorModel = new CommonPromptValidatorModel();
+                return await stepContext.replaceDialog(unblockNext_1.NEXT_OPTION_STEP, unblockBotDetails);
+            // call dialog
+            // return await stepContext.replaceDialog(ALWAYS_ON_BOT_DIALOG, null);
             // Could not understand / No intent
             default: {
                 unblockBotDetails.directDepositMasterError = -1;

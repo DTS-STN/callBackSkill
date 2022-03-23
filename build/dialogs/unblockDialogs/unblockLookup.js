@@ -14,7 +14,9 @@ const TEXT_PROMPT = 'TEXT_PROMPT';
 const CHOICE_PROMPT = 'CHOICE_PROMPT';
 exports.CONFIRM_LOOK_INTO_STEP = 'CONFIRM_LOOK_INTO_STEP';
 const CONFIRM_LOOK_INTO_WATERFALL_STEP = 'CONFIRM_LOOK_INTO_WATERFALL_STEP';
-const MAX_ERROR_COUNT = 3;
+const utils_1 = require("../../utils");
+const callbackCard_1 = require("../../cards/callbackCard");
+const unblockNext_1 = require("./unblockNext");
 class ConfirmLookIntoStep extends botbuilder_dialogs_1.ComponentDialog {
     constructor() {
         super(exports.CONFIRM_LOOK_INTO_STEP);
@@ -44,10 +46,10 @@ class ConfirmLookIntoStep extends botbuilder_dialogs_1.ComponentDialog {
         // Check if the error count is greater than the max threshold
         // Throw the master error flag
         // Set master error message to send
-        if (unblockBotDetails.errorCount.confirmLookIntoStep >= MAX_ERROR_COUNT) {
+        if (unblockBotDetails.errorCount.confirmLookIntoStep >= utils_1.MAX_ERROR_COUNT) {
             unblockBotDetails.masterError = true;
-            const errorMsg = i18nConfig_1.default.__('unblockBotDialogMasterErrorMsg');
-            await cards_1.adaptiveCard(stepContext, cards_1.TextBlock(errorMsg));
+            const errorMsg = i18nConfig_1.default.__(`MasterRetryExceededMessage`);
+            await cards_1.adaptiveCard(stepContext, callbackCard_1.callbackCard(stepContext.context.activity.locale, errorMsg));
             return await stepContext.endDialog(unblockBotDetails);
         }
         // Check the user state to see if unblockBotDetails.confirm_look_into_step is set to null or -1
@@ -76,7 +78,8 @@ class ConfirmLookIntoStep extends botbuilder_dialogs_1.ComponentDialog {
             // Setup the prompt
             const promptText = unblockBotDetails.confirmLookIntoStep === -1 ? retryMsg : promptMsg;
             const promptDetails = {
-                prompt: botbuilder_dialogs_1.ChoiceFactory.forChannel(stepContext.context, promptOptions, promptText)
+                prompt: botbuilder_dialogs_1.ChoiceFactory.forChannel(stepContext.context, promptOptions, promptText),
+                style: botbuilder_dialogs_1.ListStyle.suggestedAction
             };
             if (unblockBotDetails.confirmLookIntoStep !== -1) {
                 // Send the welcome message and text prompt
@@ -112,12 +115,7 @@ class ConfirmLookIntoStep extends botbuilder_dialogs_1.ComponentDialog {
         // Call prompts recognizer
         const recognizerResult = await luisRecognizer.executeLuisQuery(stepContext.context);
         // Top intent tell us which cognitive service to use.
-        // const intent = LuisRecognizer.topIntent(recognizerResult, 'None', 0.5);
-        // const recognizer = LUISUnblockSetup(stepContext);
-        // const recognizerResult = await recognizer.recognize(stepContext.context);
         const intent = botbuilder_ai_1.LuisRecognizer.topIntent(recognizerResult, 'None', 0.5);
-        // DEBUG
-        console.log('unblockLookupUserConfirm', unblockBotDetails, intent);
         switch (intent) {
             // Proceed
             case 'promptConfirmYes':
@@ -131,8 +129,9 @@ class ConfirmLookIntoStep extends botbuilder_dialogs_1.ComponentDialog {
                 const text = i18nConfig_1.default.__('unblock_lookup_decline_final_text');
                 const link = i18nConfig_1.default.__('unblock_lookup_decline_callback_link');
                 const linkText = i18nConfig_1.default.__('unblock_lookup_decline_final_link_text');
-                cards_1.adaptiveCard(stepContext, cards_1.TextBlockWithLink(text, link, linkText));
-                return await stepContext.endDialog(unblockBotDetails);
+                await cards_1.adaptiveCard(stepContext, cards_1.TextBlockWithLink(text, link, linkText));
+                // return await stepContext.endDialog(unblockBotDetails);
+                return await stepContext.replaceDialog(unblockNext_1.NEXT_OPTION_STEP, unblockBotDetails);
             // Could not understand / No intent
             default: {
                 unblockBotDetails.confirmLookIntoStep = -1;

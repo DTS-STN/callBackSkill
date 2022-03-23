@@ -11,6 +11,7 @@ const i18nConfig_1 = __importDefault(require("../locales/i18nConfig"));
 const callbackBotDialog_1 = require("../callbackDialogs/callbackBotDialog");
 const cards_1 = require("../../cards");
 const unblockDirectDepositMasterErrorStep_1 = require("./unblockDirectDepositMasterErrorStep");
+const unblockNext_1 = require("./unblockNext");
 exports.UNBLOCK_BOT_DIALOG = 'UNBLOCK_BOT_DIALOG';
 const MAIN_UNBLOCK_BOT_WATERFALL_DIALOG = 'MAIN_UNBLOCK_BOT_WATERFALL_DIALOG';
 class UnblockBotDialog extends botbuilder_dialogs_1.ComponentDialog {
@@ -19,12 +20,14 @@ class UnblockBotDialog extends botbuilder_dialogs_1.ComponentDialog {
         // Add the ConfirmLookIntoStep dialog to the dialog stack
         this.addDialog(new unblockLookup_1.ConfirmLookIntoStep());
         this.addDialog(new unblockDirectDeposit_1.UnblockDirectDepositStep());
+        this.addDialog(new unblockNext_1.UnblockNextOptionStep());
         this.addDialog(new unblockDirectDepositMasterErrorStep_1.UnblockDirectDepositMasterErrorStep());
         this.addDialog(new callbackBotDialog_1.CallbackBotDialog());
         this.addDialog(new botbuilder_dialogs_1.WaterfallDialog(MAIN_UNBLOCK_BOT_WATERFALL_DIALOG, [
             this.welcomeStep.bind(this),
             this.confirmLookIntoStep.bind(this),
             this.unblockDirectDepositStep.bind(this),
+            this.unblockNextOptionStep.bind(this),
             this.unblockMasterErrorStep.bind(this),
             this.finalStep.bind(this)
         ]));
@@ -81,6 +84,32 @@ class UnblockBotDialog extends botbuilder_dialogs_1.ComponentDialog {
                 // so we are sending the user to that step
                 case null:
                     return await stepContext.beginDialog(unblockDirectDeposit_1.CONFIRM_DIRECT_DEPOSIT_STEP, unblockBotDetails);
+                // The confirmLookIntoStep flag in the state machine is set to true
+                // so we are sending the user to next step
+                case true:
+                    return await stepContext.next(unblockBotDetails);
+                // The flag in the state machine is set to false
+                // so we are sending to the end because they don't want to continue
+                case false:
+                default:
+                    return await stepContext.endDialog(unblockBotDetails);
+            }
+        }
+    }
+    async unblockNextOptionStep(stepContext) {
+        // Get the state machine from the last step
+        const unblockBotDetails = stepContext.result;
+        // Check if a master error occurred and then end the dialog
+        if (unblockBotDetails.masterError) {
+            return await stepContext.endDialog(unblockBotDetails);
+        }
+        else {
+            // If no master error occurred continue on to the next step
+            switch (unblockBotDetails.nextOptionStep) {
+                // The flag in the state machine isn't set
+                // so we are sending the user to that step
+                case null:
+                    return await stepContext.beginDialog(unblockNext_1.NEXT_OPTION_STEP, unblockBotDetails);
                 // The confirmLookIntoStep flag in the state machine is set to true
                 // so we are sending the user to next step
                 case true:

@@ -5,10 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MainDialog = void 0;
 const botbuilder_dialogs_1 = require("botbuilder-dialogs");
-const botbuilder_1 = require("botbuilder");
 const i18nConfig_1 = __importDefault(require("./locales/i18nConfig"));
-const callbackBotDialog_1 = require("./callbackDialogs/callbackBotDialog");
+const unblockBotDialog_1 = require("./unblockDialogs/unblockBotDialog");
 const callbackBotDetails_1 = require("./callbackDialogs/callbackBotDetails");
+const callbackBotDialog_1 = require("./callbackDialogs/callbackBotDialog");
 const CHOICE_PROMPT = 'CHOICE_PROMPT';
 // The String ID name for the main dialog
 const MAIN_DIALOG = 'MAIN_DIALOG';
@@ -19,6 +19,7 @@ class MainDialog extends botbuilder_dialogs_1.ComponentDialog {
         super(MAIN_DIALOG);
         // Add the unblockBot dialog to the dialog
         this.addDialog(new callbackBotDialog_1.CallbackBotDialog());
+        this.addDialog(new unblockBotDialog_1.UnblockBotDialog());
         this.addDialog(new botbuilder_dialogs_1.ChoicePrompt(CHOICE_PROMPT));
         this.addDialog(new botbuilder_dialogs_1.WaterfallDialog(MAIN_WATERFALL_DIALOG, [
             this.initialStep.bind(this),
@@ -41,12 +42,6 @@ class MainDialog extends botbuilder_dialogs_1.ComponentDialog {
         if (results.status === botbuilder_dialogs_1.DialogTurnStatus.empty) {
             await dialogContext.beginDialog(this.id);
         }
-        else if (results.status === botbuilder_dialogs_1.DialogTurnStatus.complete) {
-            await turnContext.sendActivity({
-                type: botbuilder_1.ActivityTypes.EndOfConversation,
-                code: botbuilder_1.EndOfConversationCodes.CompletedSuccessfully
-            });
-        }
     }
     /**
      * Initial step in the waterfall. This will kick of the callbackBot dialog
@@ -55,8 +50,6 @@ class MainDialog extends botbuilder_dialogs_1.ComponentDialog {
         // Here we are start the unblock dialog in the prototype,
         // in the real case, the callback flow will trigger from unblock bot, which
         // should run in a different instance
-        // const unblockBotDetails = new UnblockBotDetails();
-        // return await stepContext.beginDialog(UNBLOCK_BOT_DIALOG, unblockBotDetails);
         const callbackBotDetails = new callbackBotDetails_1.CallbackBotDetails();
         return await stepContext.beginDialog(callbackBotDialog_1.CALLBACK_BOT_DIALOG, callbackBotDetails);
     }
@@ -69,7 +62,7 @@ class MainDialog extends botbuilder_dialogs_1.ComponentDialog {
         // Running a prompt here means the next WaterfallStep will be run when the user's response is received.
         return await stepContext.prompt(CHOICE_PROMPT, {
             prompt: feedbackMsg,
-            choices: botbuilder_dialogs_1.ChoiceFactory.toChoices(['😡', '🙁', '😐', '🙂', '😄'])
+            choices: botbuilder_dialogs_1.ChoiceFactory.toChoices(['1 = 😡', '2 = 🙁', '3 = 😐', '4 = 🙂', '5 = 😄'])
         });
     }
     /**

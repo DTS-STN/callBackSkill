@@ -9,15 +9,20 @@ const botbuilder_dialogs_1 = require("botbuilder-dialogs");
 const callbackRecognizer_1 = require("./callbackRecognizer");
 const getPreferredMethodOfContactStep_1 = require("./getPreferredMethodOfContactStep");
 const i18nConfig_1 = __importDefault(require("../locales/i18nConfig"));
+const CHOICE_PROMPT = 'CHOICE_PROMPT';
 const TEXT_PROMPT = 'TEXT_PROMPT';
 exports.GET_USER_EMAIL_STEP = 'GET_USER_EMAIL_STEP';
 const GET_USER_EMAIL_WATERFALL_STEP = 'GET_USER_EMAIL_WATERFALL_STEP';
-const MAX_ERROR_COUNT = 3;
+const utils_1 = require("../../utils");
+const commonPromptValidatorModel_1 = require("../../models/commonPromptValidatorModel");
+const alwaysOnBotDialog_1 = require("../alwaysOnDialogs/alwaysOnBotDialog");
 class GetUserEmailStep extends botbuilder_dialogs_1.ComponentDialog {
     constructor() {
         super(exports.GET_USER_EMAIL_STEP);
         // Add a text prompt to the dialog stack
         this.addDialog(new botbuilder_dialogs_1.TextPrompt(TEXT_PROMPT));
+        this.addDialog(new botbuilder_dialogs_1.ChoicePrompt(CHOICE_PROMPT));
+        // this.addDialog(new AlwaysOnBotDialog());
         this.addDialog(new botbuilder_dialogs_1.WaterfallDialog(GET_USER_EMAIL_WATERFALL_STEP, [
             this.initialStep.bind(this),
             this.finalStep.bind(this)
@@ -36,19 +41,18 @@ class GetUserEmailStep extends botbuilder_dialogs_1.ComponentDialog {
         // Set the text for the retry prompt
         const retryMsg = i18nConfig_1.default.__('getUserEmailFormatErrorMsg');
         // Check if the error count is greater than the max threshold
-        if (callbackBotDetails.errorCount.getUserEmailStep >= MAX_ERROR_COUNT) {
+        if (callbackBotDetails.errorCount.getUserEmailStep >= utils_1.MAX_ERROR_COUNT) {
             // Throw the master error flag
-            // callbackBotDetails.masterError = true;
             const errorMsg = i18nConfig_1.default.__('emailFormatMaxErrorMsg');
-            // Send master error message
-            // await stepContext.context.sendActivity(errorMsg);
             const promptOptions = i18nConfig_1.default.__('confirmEmailStepErrorPromptOptions');
             const promptDetails = {
                 prompt: botbuilder_dialogs_1.ChoiceFactory.forChannel(stepContext.context, promptOptions, errorMsg)
             };
-            return await stepContext.prompt(TEXT_PROMPT, promptDetails);
-            // End the dialog and pass the updated details state machine
-            // return await stepContext.endDialog(callbackBotDetails);
+            return await stepContext.prompt(CHOICE_PROMPT, {
+                prompt: errorMsg,
+                choices: botbuilder_dialogs_1.ChoiceFactory.toChoices(promptOptions),
+                style: botbuilder_dialogs_1.ListStyle.suggestedAction
+            });
         }
         // Check the user state to see if unblockBotDetails.getAndSendEmailStep is set to null or -1
         // If it is in the error state (-1) or or is set to null prompt the user
@@ -81,7 +85,8 @@ class GetUserEmailStep extends botbuilder_dialogs_1.ComponentDialog {
         let lang = 'en';
         // Then change LUIZ appID
         if (stepContext.context.activity.locale.toLowerCase() === 'fr-ca' ||
-            stepContext.context.activity.locale.toLowerCase() === 'fr-fr') {
+            stepContext.context.activity.locale.toLowerCase() === 'fr-fr' ||
+            stepContext.context.activity.locale.toLowerCase() === 'fr') {
             lang = 'fr';
         }
         // LUIZ Recogniser processing
@@ -95,6 +100,7 @@ class GetUserEmailStep extends botbuilder_dialogs_1.ComponentDialog {
             case 'promptConfirmSendEmailYes':
             case 'promptConfirmNotifyYes':
             case 'promptConfirmYes':
+            case 'promptTryAgainYes':
                 console.log('INTENT: ', intent);
                 callbackBotDetails.getPreferredMethodOfContactStep = null;
                 callbackBotDetails.confirmEmailStep = null;
@@ -106,8 +112,10 @@ class GetUserEmailStep extends botbuilder_dialogs_1.ComponentDialog {
             // Don't Proceed
             case 'promptConfirmEmailNo':
             case 'promptConfirmNo':
-                console.log('INTENT: ', intent);
-                return await stepContext.endDialog(callbackBotDetails);
+            case 'NoNotForNow':
+                const commonPromptValidatorModel = new commonPromptValidatorModel_1.CommonPromptValidatorModel();
+                // call dialog
+                return await stepContext.beginDialog(alwaysOnBotDialog_1.ALWAYS_ON_BOT_DIALOG, commonPromptValidatorModel);
             // Could not understand / None intent
             default: {
                 // Catch all

@@ -13,7 +13,7 @@ const CHOICE_PROMPT = 'CHOICE_PROMPT';
 exports.CONFIRM_DIRECT_DEPOSIT_STEP = 'CONFIRM_DIRECT_DEPOSIT_STEP';
 const CONFIRM_DIRECT_DEPOSIT_WATERFALL_STEP = 'CONFIRM_DIRECT_DEPOSIT_WATERFALL_STEP';
 // Error handling
-const MAX_ERROR_COUNT = 3;
+const utils_1 = require("../../utils");
 const ACCOUNT = false;
 let TRANSIT = false;
 let INSTITUTE = false;
@@ -39,7 +39,7 @@ class UnblockDirectDepositStep extends botbuilder_dialogs_1.ComponentDialog {
         // Check if the error count is greater than the max threshold
         // the design for this step is different compare to other steps
         // this time will not trigger a master error. it will go to a new step
-        if (unblockBotDetails.errorCount.unblockDirectDeposit >= MAX_ERROR_COUNT) {
+        if (unblockBotDetails.errorCount.unblockDirectDeposit >= utils_1.MAX_ERROR_COUNT) {
             unblockBotDetails.unblockDirectDeposit = -1;
             return await stepContext.replaceDialog(unblockDirectDepositMasterErrorStep_1.UNBLOCK_DIRECT_DEPOSIT_MASTER_ERROR_STEP, unblockBotDetails);
         }
@@ -149,13 +149,13 @@ class UnblockDirectDepositStep extends botbuilder_dialogs_1.ComponentDialog {
     async unblockDirectDepositEnd(stepContext) {
         // Set the messages
         const unblockBotDetails = stepContext.options;
-        const validReminder = i18nConfig_1.default.__('unblock_direct_deposit_valid_reminder');
+        // const validReminder = i18n.__('unblock_direct_deposit_valid_reminder');
         const doneMsg = i18nConfig_1.default.__('unblock_direct_deposit_complete');
         const validMsg = i18nConfig_1.default.__('unblock_direct_deposit_valid_msg');
         const tipMsg = i18nConfig_1.default.__('unblock_direct_deposit_valid_tip');
         // Display the prompts
         await cards_1.adaptiveCard(stepContext, cards_1.TwoTextBlock(validMsg, tipMsg));
-        await cards_1.adaptiveCard(stepContext, cards_1.TextBlock(validReminder));
+        // await adaptiveCard(stepContext, TextBlock(validReminder));
         await cards_1.adaptiveCard(stepContext, cards_1.TextBlock(doneMsg));
         unblockBotDetails.directDepositMasterError = false;
         // End the dialog

@@ -24,7 +24,7 @@ const dotenv_1 = require("dotenv");
 const restify = require('restify');
 // Read environment variables from .env file
 // Import required bot configuration.
-const ENV_FILE = path.join(__dirname, '..', '.env');
+const ENV_FILE = path.join(__dirname, "..", ".env");
 dotenv_1.config({ path: ENV_FILE });
 // Import required bot services.
 // See https://aka.ms/bot-services to learn more about the different parts of a bot.
@@ -38,9 +38,9 @@ const botframework_connector_1 = require("botframework-connector");
 const server = restify.createServer();
 server.use(restify.plugins.bodyParser());
 // server.use(i18n.init);
-server.listen(process.env.port || process.env.PORT || 39783, () => {
+server.listen(process.env.port || process.env.PORT || 3978, () => {
     console.log(`\n${server.name} listening to ${server.url}`);
-    console.log('\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator');
+    console.log("\nGet Bot Framework Emulator: https://aka.ms/botframework-emulator");
     console.log('\nTo talk to your bot, open the emulator select "Open Bot"');
 });
 // Expose the manifest
@@ -85,10 +85,10 @@ const onTurnErrorHandler = async (context, error) => {
     //       configuration instructions.
     console.error(`\n [onTurnError] unhandled error: ${error}`);
     // Send a trace activity, which will be displayed in Bot Framework Emulator
-    await context.sendTraceActivity('OnTurnError Trace', `${error}`, 'https://www.botframework.com/schemas/error', 'TurnError');
+    await context.sendTraceActivity("OnTurnError Trace", `${error}`, "https://www.botframework.com/schemas/error", "TurnError");
     // Send a message to the user
-    await context.sendActivity('The bot encountered an error or bug.');
-    await context.sendActivity('To continue to run this bot, please fix the bot source code.');
+    await context.sendActivity("The bot encountered an error or bug.");
+    await context.sendActivity("To continue to run this bot, please fix the bot source code.");
 };
 // Set the onTurnError for the singleton BotFrameworkAdapter.
 adapter.onTurnError = onTurnErrorHandler;
@@ -99,7 +99,7 @@ const memoryStorage = new botbuilder_1.MemoryStorage();
 // Create conversation state with in-memory storage provider.
 const conversationState = new botbuilder_1.ConversationState(memoryStorage);
 // Create the Dialog State for the bot
-const dialogs = new botbuilder_dialogs_1.DialogSet(conversationState.createProperty('DialogState'));
+const dialogs = new botbuilder_dialogs_1.DialogSet(conversationState.createProperty("DialogState"));
 // Create the User State for the bot
 const userState = new botbuilder_1.UserState(memoryStorage);
 // Create the main dialog.
@@ -112,16 +112,16 @@ server.post('/api/messages', async (req, res) => {
 // [OPTIONAL]
 // When deploying azure usually pings the web app server to know the status. The request can be ignored or answered, depending
 // on the implementation. In my case it was logging the errors so I prefer to just reply to the request.
-server.get('/', (req, res, next) => {
+server.get("/", (req, res, next) => {
     res.send(200);
     next();
 });
 // Listen for Upgrade requests for Streaming.
-server.on('upgrade', (req, socket, head) => {
+server.on("upgrade", (req, socket, head) => {
     // Create an adapter scoped to this WebSocket connection to allow storing session data.
     const streamingAdapter = new botbuilder_1.BotFrameworkAdapter({
         appId: process.env.MicrosoftAppId,
-        appPassword: process.env.MicrosoftAppPassword
+        appPassword: process.env.MicrosoftAppPassword,
     });
     // Set onTurnError for the BotFrameworkAdapter created for each connection.
     streamingAdapter.onTurnError = onTurnErrorHandler;
