@@ -6,7 +6,6 @@ lib/
 
 # Environment variables
 .env.*
-.env
 
 # Bot Files
 *.bot
@@ -16,9 +15,4 @@ test-results.xml
 
 #coverage
 coverage
-.nyc_output
-
-# history extension
-
-.history
-.DS_Store
+.nyc_output 
