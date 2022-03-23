@@ -14,7 +14,6 @@
     },
     "rules": {
         "semi": ["error", "always"],
-       "no-error-on-unmatched-pattern": "false",
         "no-return-await": 0,
         "space-before-function-paren": ["error", {
             "named": "never",

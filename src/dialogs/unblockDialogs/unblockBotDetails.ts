@@ -7,6 +7,7 @@ export class UnblockBotDetails {
   public unblockDirectDeposit;
   public errorCount;
   public directDepositMasterError;
+  public nextOptionStep;
 
   constructor() {
     // Master error - flag that is thrown when we hit a critical error in the conversation flow
@@ -17,13 +18,14 @@ export class UnblockBotDetails {
 
     // [STEP 2] Requests they unblock their direct deposit
     this.unblockDirectDeposit = null;
-
+    this.nextOptionStep = null;
     this.directDepositMasterError = null;
     // State machine that stores the error counts of each step
     this.errorCount = {
       confirmLookIntoStep: 0,
       unblockDirectDeposit: 0,
-      directDepositErrorStep: 0
+      directDepositErrorStep: 0,
+      nextOptionStep: 0
     };
   }
 }
