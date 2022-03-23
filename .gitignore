@@ -3,6 +3,7 @@ node_modules/
 
 # Generated folder by build process
 lib/
+build/
 
 # Environment variables
 .env.*
