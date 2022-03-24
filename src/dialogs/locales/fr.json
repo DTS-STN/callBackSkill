@@ -38,7 +38,7 @@
 	"unblock_direct_deposit_complete": "Pour le moment, vous avez tout ce qu'il vous faut!",
 	"unblock_direct_deposit_main_error": "Hum, il semble que les numéros que vous avez entrés ne soient pas valides. \n\n Veuillez vérifier vos renseignements bancaires avant de continuer. Je peux aussi demander à un représentant de Service Canada de vous téléphoner pour vous aider à soumettre votre demande de pension. \n\n Est-ce que ça vous convient?",
 	"unblock_direct_deposit_cheque_path": "/attachments/cheque-fr.svg",
-	"unblockBotDialogMasterErrorMsg": "Hum, j'ai de la difficulté à vous comprendre. Excusez-moi! Veuillez consulter notre centre d'aide ou nous appeler au 123-456-7890.",
+	"unblockBotDialogMasterErrorMsg": "Hum, j'ai de la difficulté à vous comprendre. Excusez-moi! Veuillez consulter notre centre d'aide ou nous appeler au 123-654-0987.",
 	"unblockToAlwaysOnBotOrCallbackBotQueryMsg": "Y a-t-il autre chose que je puisse faire pour vous aujourd'hui?",
 	"unblockToAlwaysOnBotOrCallbackBotQueryRetryMsg":"Hum, je ne comprends pas. Y a-t-il autre chose que je puisse faire pour vous aujourd'hui?",
 	"callback-dialogs-msg": "-------------------------------",
@@ -86,17 +86,17 @@
 		"Non merci"
 	],
 	"confirmCallbackStepCloseMsg": "D'accord, pas de problème. Je suis là si vous avez besoin de moi!",
-	"confirmAuthWordStepStandardMsg": "Voici votre code de confirmation : [XXX-XXXXXXXXXXXXXXX].",
+	"confirmAuthWordStepStandardMsg": "Voici votre code de confirmation : XXX-XXXXXXXXXXXXXXX.",
 	"confirmAuthWordMsg": "You will be contacted by an officer from Service Canada within the next 48 hours between 9-5pm EST.",
 	"confirmAuthStepMsg": "Je vais également vous donner un code de confirmation. Lorsque le représentant vous appellera, il vous transmettra ce code pour prouver qu'il ne s'agit pas d'un appel frauduleux.",
 	"getCallbackScheduleStandardMsg": "Très bien! Je vais demander à un représentant de Service Canada de vous téléphoner dans les prochaines 48 heures, entre 9h et 17h (HNE).",
-	"confirmEmailStepStandMsg": "L'adresse de courrier électronique que j'ai est [test@test.com]. Est-ce que cette adresse est correcte?",
+	"confirmEmailStepStandMsg": "L'adresse de courrier électronique que j'ai est test@test.com. Est-ce que cette adresse est correcte?",
 	"confirmEmailStepRetryMsg": "Hum, je ne comprends pas. Est-ce la bonne adresse de courrier électonique?",
 	"confirmEmailStepStandardPromptOptions": [
 		"Oui",
 		"Non"
 	],
-	"confirmPhoneStepStandMsg": "Le numéro de téléphone que j'ai est le [123-456-7890]. Est-ce que ce numéro peut recevoir des messages texte?",
+	"confirmPhoneStepStandMsg": "Le numéro de téléphone que j'ai est le 123-654-0987. Est-ce que ce numéro peut recevoir des messages texte?",
 	"confirmPhoneStepRetryMsg": "Hum, je ne comprends pas. Est-ce que ce numéro peut recevoir des messages texte?",
 	"confirmPhoneStepStandardPromptOptions": [
 		"Oui",
@@ -115,7 +115,7 @@
 	],
 	"botGreatMsg": "Je vois. Il semble que vous ayez besoin de plus d'aide que je ne peux vous en fournir pour le moment.",
 	"confirmEmailStepErrorPromptOptions": [
-		"Oui, appelez-moi",
+		"Oui, je veux réessayer",
 		"Non, pas pour l'instant"
 	],
 	"confirmCallbackPhoneNumberStepStandardMsg": "D'accord! Est-ce que le [XXX-XXX-XXXX] est toujours le meilleur numéro de téléphone pour vous joindre?",
@@ -139,8 +139,8 @@
 	"getUserPhoneConfirmMsg": "D'accord, je vous envoie votre code de confirmation par message texte au [NUMÉRO DE TÉLÉPHONE].",
 	"getUserEmailFormatErrorMsg": "Oups, il semble que l'adresse de courrier électronique que vous avez entrée n'utilise pas le bon format (voici un exemple : nom@courriel.com). Essayez à nouveau.",
 	"getUserPhoneNumberFormatErrorMsg": "Oups, il semble que le numéro de téléphone que vous avez entré n'utilise pas le bon format (voici un exemple : 123-456-7890). Essayez à nouveau.",
-	"emailFormatMaxErrorMsg": "Il semble que les adresses de courrier électronique que vous avez entrées n'utilisent pas le bon format. Veuillez vérifier votre adresse de courrier électronique avant de continuer. Voulez-vous réessayer?",
-	"phoneNumberFormatMaxErrorMsg": "Il semble que les numéros de téléphone que vous avez entrés n'utilisent pas le bon format. Veuillez vérifier votre numéro de téléphone avant de continuer. Voulez-vous réessayer?",
+	"emailFormatMaxErrorMsg": "Il semble que l'adresse de courrier électronique que vous avez entrée n'utilise pas le bon format. Veuillez vérifier votre adresse de courrier électronique avant de continuer. Voulez-vous réessayer?",
+	"phoneNumberFormatMaxErrorMsg": "Il semble que le numéro de téléphone que vous avez entré n'utilise pas le bon format. Veuillez vérifier votre numéro de téléphone avant de continuer. Voulez-vous réessayer?",
 	"rateRetryMsg": "Oops - I'm not sure what you meant. Can you rate the service you received today?",
 	"standardQueryMsg": [
 		"Oui s'il vous plaît",
@@ -242,6 +242,8 @@
 	"NewStreetNumberPrompt": "Quel est votre nouveau numéro de rue? Par exemple, « 36 » si votre adresse est le 36, rue des Érables",
 	"StreetNumbersPrompt": "Quel est votre nouveau numéro de rue?",
 	"IncorrectPostalCodePrompt": "Oups, il semble que le code postal que vous avez entré n'utilise pas le bon format (voici un exemple : T2T 4M4). Essayez à nouveau.",
+	"NoAddressInAPIPrompt": "Je suis désolé, je n'ai pas trouvé d'adresse pour ce code postal. Essayez à nouveau.",
+	"APIDownPrompt": "Ah non! Il semble qu'une erreur s'est produite de mon côté.",
 	"NoStatementPhoneNumber": "D'accord, pas de problème!",
 	"AskPhoneNUmber": "Quel est votre nouveau numéro de téléphone?(voici un exemple : 123-456-7890)",
 	"PhoneNumberConfirmStep": "Parfait! J'ai mis à jour votre numéro de téléphone @phoneNumber",
@@ -303,9 +305,9 @@
 	],
 	"NewStreetNumberRetryPrompt": "Hum, je ne comprends pas. Veuillez entrer le numéro de rue de votre nouvelle résidence.",
 	"UnitORApartmentRetryPrompt": "Hum, je ne comprends pas. Veuillez entrer votre nouveau numéro d'appartement ou d'unité.",
-	"PoNumberPromptRetryMessage": "Hmm, I'm not sure what you meant. Please enter your new post office box number.",
+	"PoNumberPromptRetryMessage": "Hum, je ne comprends pas. Veuillez entrer votre nouveau numéro de case postale.",
 	"CannotFindMyAddress": "Je ne peux pas voir mon adresse ici",
-	"StreetAddressNotFoundMessage": "Je suis désolé, je ne crois pas pouvoir vous aider à faire votre changement d'adresse aujourd'hui. Par contre, je peux demander à un représentant de Service Canada de vous téléphoner pour vous aider.\n\n Voulez-vous que je planifie un appel?",
+	"StreetAddressNotFoundMessage": "Je suis désolé, je ne crois pas pouvoir vous aider à faire votre changement d'adresse aujourd'hui. Par contre, je peux demander à un représentant de Service Canada de vous téléphoner pour vous aider.",
 	"StreetAddressNotFoundPromptMessage": "Voulez-vous que je planifie un appel?",
 	"StreetAddressNotFoundPromptOptions": [
 		"Oui, appelez-moi",

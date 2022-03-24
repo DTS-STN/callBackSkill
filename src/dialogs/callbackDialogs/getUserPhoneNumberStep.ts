@@ -22,8 +22,7 @@ const GET_USER_PHONE_NUMBER_WATERFALL_STEP =
 import { MAX_ERROR_COUNT}  from '../../utils'
 import { adaptiveCard } from '../../cards';
 import { callbackCard } from '../../cards/callbackCard';
-import { CommonPromptValidatorModel } from '../../models/commonPromptValidatorModel';
-import { ALWAYS_ON_BOT_DIALOG } from '../alwaysOnDialogs/alwaysOnBotDialog';
+import { CALLBACK_NEXT_OPTION_STEP } from './callbackNext';
 const CHOICE_PROMPT = 'CHOICE_PROMPT';
 export class GetUserPhoneNumberStep extends ComponentDialog {
   constructor() {
@@ -155,9 +154,8 @@ export class GetUserPhoneNumberStep extends ComponentDialog {
       case 'promptConfirmNo':
       case 'NoNotForNow':
 
-        const commonPromptValidatorModel = new CommonPromptValidatorModel();
-        // call dialog
-        return await stepContext.replaceDialog(ALWAYS_ON_BOT_DIALOG, commonPromptValidatorModel);
+        // call next option dialog
+        return await stepContext.replaceDialog(CALLBACK_NEXT_OPTION_STEP, callbackBotDetails);
 
       // Could not understand / None intent
       default: {

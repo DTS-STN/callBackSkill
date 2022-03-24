@@ -12,6 +12,7 @@ export class CallbackBotDetails {
   public getPreferredCallbackDateAndTimeStep;
   public getPreferredMethodOfContactStep;
   public phoneNumber;
+  public userEmail;
   public date;
   public time;
   public authCode;
@@ -27,7 +28,8 @@ export class CallbackBotDetails {
   constructor() {
     // Master error - flag that is thrown when we hit a critical error in the conversation flow
     this.masterError = null;
-
+    this.phoneNumber = '123-654-0987';
+    this.userEmail = 'test@test.com';
     this.preferredEmail = null;
     this.preferredText = null;
     this.preferredEmailAndText = null;

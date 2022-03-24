@@ -88,7 +88,7 @@
 		"No thanks"
 	],
 	"confirmCallbackStepCloseMsg": "Ok, no problem. I'm here if you need me!",
-	"confirmAuthWordStepStandardMsg": "Here is your confirmation code: [XXX-XXXXXXXXXXXXXXX].",
+	"confirmAuthWordStepStandardMsg": "Here is your confirmation code: XXX-XXXXXXXXXXXXXXX.",
 	"confirmAuthWordMsg": "You will be contacted by an officer from Service Canada within the next 48 hours between 9-5pm EST.",
 	"confirmAuthStepMsg": "I'm also going to share a confirmation code with you. When the representative calls you, they'll read this code to prove they aren't a spam caller.",
 	"getCallbackScheduleStandardMsg": "Great! A Service Canada representative will call you within the next 48 hours, between 9 a.m. and 5 p.m. (EST).",
@@ -103,7 +103,7 @@
 		"Email and text message",
 		"No, I don't want a confirmation"
 	],
-	"confirmEmailStepStandMsg": "The email address I have for you is [test@test.com]. Is this the correct email address?",
+	"confirmEmailStepStandMsg": "The email address I have for you is test@test.com. Is this the correct email address?",
 	"confirmEmailStepRetryMsg": "Hmm, I'm not sure what you meant. Is this the correct email address?",
 	"confirmEmailStepStandardPromptOptions": [
 		"Yes",
@@ -113,7 +113,7 @@
 		"Yes, I want to try again.",
 		"No, I'm OK for now."
 	],
-	"confirmPhoneStepStandMsg": "The phone number I have for you is [123-456-7890]. Can this number receive text messages?",
+	"confirmPhoneStepStandMsg": "The phone number I have for you is 123-654-0987. Can this number receive text messages?",
 	"confirmPhoneStepRetryMsg": "Hmm, I'm not sure what you meant. Can this number receive text messages??",
 	"confirmPhoneStepStandardPromptOptions": [
 		"Yes",
@@ -135,7 +135,7 @@
 		"No thanks"
 	],
 	"confirmLookIntoStepCloseMsg": "Ok, no problem. Let me know if you change your mind!",
-	"confirmCallbackPhoneNumberStepStandardMsg": "Ok, is [123-456-7890] still the best phone number to reach you?",
+	"confirmCallbackPhoneNumberStepStandardMsg": "Ok, is 123-654-0987 still the best phone number to reach you?",
 	"confirmCallbackPhoneNumberStepStandardPromptOptions": [
 		"Yes",
 		"No"
@@ -144,7 +144,7 @@
 		"Yes, Please!",
 		"No, Thanks"
 	],
-	"confirmCallbackPhoneNumberStepRetryMsg": "Hmm, I'm not sure what you meant. Is [123-456-7890] still the best phone number to reach you?",
+	"confirmCallbackPhoneNumberStepRetryMsg": "Hmm, I'm not sure what you meant. Is 123-654-0987 still the best phone number to reach you?",
 	"confirmSendEmailStepStandardMsg": "So, I can see that you completed your application on August 12, and the application itself looks good. However, we still haven’t received a Record of Employment from your previous employer, Initech.",
 	"confirmSendEmailStepRetryMsg": "Hmm, I'm not sure what you meant. Do you want me to send a follow-up email to Initech?",
 	"confirmSendEmailStepQueryMsg": "If you like, I can send Initech a follow-up email from the Government of Canada. That usually does the trick 😉",
@@ -252,7 +252,7 @@
 	"SetStep": "Ok, you’re all set then!",
 	"MasterRetryExceededMessage": "Hmm, I'm having a hard time understanding you. Sorry about that! Please visit our Help Centre or give us a call at 123-456-7890.",
 	"MasterErrorMessageLink": "Go to Help Centre",
-	"UpdateMyPhoneNumberPromptMessage": "Ok, great! I can help with that. The phone number I have for you is 123-456-7890. Would you like to update to a new phone number?",
+	"UpdateMyPhoneNumberPromptMessage": "Ok, great! I can help with that. The phone number I have for you is 123-654-0987. Would you like to update to a new phone number?",
 	"UpdateMyPhoneNumberPromptOptions": [
 		"Yes",
 		"No"
@@ -264,15 +264,17 @@
 		"Yes, I want to request a call",
 		"No, not for now"
 	],
-	"PoNumberPromptMessage": "what's your new post office box number?",
+	"PoNumberPromptMessage": "What's your new post office box number?",
 	"PoNumberPromptRetryMessage": "Hmm, I'm not sure what you meant. Please enter your new post office box number.",
 	"MoreStreetNumbersPrompt": "I found more than one street for that postal code, Please select your street from the ones provided below.",
 	"UnitORApartmentPrompt": "What's your new apartment or unit number?",
 	"UnitORApartmentRetryPrompt": "Hmm, I'm not sure what you meant. Please enter your new apartment or unit number.",
 	"NewStreetNumberPrompt": "What's your new street number? (For example, 36 if your address is 36 Maple Avenue)",
 	"NewStreetNumberRetryPrompt": "Hmm, I'm not sure what you meant. Please enter your new street number.",
-	"StreetNumbersPrompt": "what's your new street number?",
+	"StreetNumbersPrompt": "What's your new street number?",
 	"IncorrectPostalCodePrompt": "Oops, looks like the postal code you entered isn't formatted correctly (here's an example: T2T 4M4). Let's try again.",
+	"NoAddressInAPIPrompt": "Sorry, I can't find any addresses with that postal code. Let's try again.",
+	"APIDownPrompt": "Oh, no! Looks like something's wrong on my end.",
 	"GetAddressPromptOptions": [
 		"Yes",
 		"No"

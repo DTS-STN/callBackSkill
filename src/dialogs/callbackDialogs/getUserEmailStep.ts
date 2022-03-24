@@ -18,8 +18,7 @@ const TEXT_PROMPT = 'TEXT_PROMPT';
 export const GET_USER_EMAIL_STEP = 'GET_USER_EMAIL_STEP';
 const GET_USER_EMAIL_WATERFALL_STEP = 'GET_USER_EMAIL_WATERFALL_STEP';
 import { MAX_ERROR_COUNT}  from '../../utils'
-import { CommonPromptValidatorModel } from '../../models/commonPromptValidatorModel';
-import { AlwaysOnBotDialog, ALWAYS_ON_BOT_DIALOG } from '../alwaysOnDialogs/alwaysOnBotDialog';
+import { CALLBACK_NEXT_OPTION_STEP } from './callbackNext';
 
 export class GetUserEmailStep extends ComponentDialog {
   constructor() {
@@ -58,15 +57,6 @@ export class GetUserEmailStep extends ComponentDialog {
       const errorMsg = i18n.__('emailFormatMaxErrorMsg');
 
       const promptOptions = i18n.__('confirmEmailStepErrorPromptOptions');
-
-      const promptDetails = {
-        prompt: ChoiceFactory.forChannel(
-          stepContext.context,
-          promptOptions,
-          errorMsg
-        )
-      };
-
 
       return await stepContext.prompt(CHOICE_PROMPT, {
         prompt: errorMsg,
@@ -150,9 +140,7 @@ export class GetUserEmailStep extends ComponentDialog {
       case 'promptConfirmEmailNo':
       case 'promptConfirmNo':
       case 'NoNotForNow':
-       const commonPromptValidatorModel = new CommonPromptValidatorModel();
-      // call dialog
-      return await stepContext.beginDialog(ALWAYS_ON_BOT_DIALOG, commonPromptValidatorModel);
+        return await stepContext.replaceDialog(CALLBACK_NEXT_OPTION_STEP, callbackBotDetails);
 
       // Could not understand / None intent
       default: {
