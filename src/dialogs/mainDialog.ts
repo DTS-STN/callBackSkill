@@ -41,8 +41,8 @@ export class MainDialog extends ComponentDialog {
     this.addDialog(
       new WaterfallDialog(MAIN_WATERFALL_DIALOG, [
         this.initialStep.bind(this),
-        this.rateStep.bind(this),
-        this.finalStep.bind(this)
+       // this.rateStep.bind(this),
+      //  this.finalStep.bind(this)
       ])
     );
 

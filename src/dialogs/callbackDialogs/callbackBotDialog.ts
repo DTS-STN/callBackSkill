@@ -42,7 +42,7 @@ export class CallbackBotDialog extends ComponentDialog {
     this.addDialog(new ConfirmPhoneStep());
     this.addDialog(new GetUserEmailStep());
     this.addDialog(new GetUserPhoneNumberStep());
-    this.addDialog(new CallbackNextOptionStep());
+    // this.addDialog(new CallbackNextOptionStep());
 
     this.addDialog(
       new WaterfallDialog(MAIN_CALLBACK_BOT_WATERFALL_DIALOG, [
@@ -55,7 +55,7 @@ export class CallbackBotDialog extends ComponentDialog {
 
         this.getUserEmailStep.bind(this),
         this.getUserPhoneNumberStep.bind(this),
-        this.NextOptionStep.bind(this),
+        // this.NextOptionStep.bind(this),
         this.finalStep.bind(this)
       ])
     );
