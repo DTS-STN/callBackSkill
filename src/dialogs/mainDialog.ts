@@ -10,7 +10,7 @@ import {
   DialogState
 } from 'botbuilder-dialogs';
 
-import { TurnContext, StatePropertyAccessor } from 'botbuilder';
+import { TurnContext, StatePropertyAccessor, ActivityTypes, EndOfConversationCodes } from 'botbuilder';
 
 import i18n from './locales/i18nConfig';
 import { UnblockBotDetails } from './unblockDialogs/unblockBotDetails';
@@ -66,6 +66,11 @@ export class MainDialog extends ComponentDialog {
     const results = await dialogContext.continueDialog();
     if (results.status === DialogTurnStatus.empty) {
       await dialogContext.beginDialog(this.id);
+    }else if (results.status === DialogTurnStatus.complete) {
+      await turnContext.sendActivity({
+        type: ActivityTypes.EndOfConversation,
+        code: EndOfConversationCodes.CompletedSuccessfully
+      });
     }
   }
 
